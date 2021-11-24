@@ -6,44 +6,104 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="index.css">
 </head>
 
 <body>
-    <form>
-        <label for="id">id:</label><br>
-        <input type="number" id="id" name="id"><br>
-        <button onclick="fetchData()">fetch</button>
-      </form>
-
+    <div class="userbody">
+        
+        <div class="box" id="b1"> 
+        <label for="id">ID:</label>
+        <input type="text" id="id" placeholder="Enter your ID" > 
+        </div>
+     
+        <div class="box" id="b2"> 
+    <label for="password" >Password:</label>
+    <input type="text" id="password" placeholder="Enter your Password">
+    </div>
+   
+    <!-- <div class="btn"> -->
+    <button class ="btn" onclick="fetchData()">fetch</button>
     
-    <!-- <button onclick="addUser()">add</button> -->
+    <!-- </div> -->
+    </div>
     <div id="data"></div>
-
     <script>
         fetchData = () => {
-            event.preventDefault();
-            const division = document.getElementById("data");
-            const id=document.getElementById("id").value;
-            // console.log(id);
-            fetch(`http://localhost:5000/${parseInt(id)}`)
+            const data = document.getElementById("data");
+            const uid = document.getElementById("id").value;
+            const password = document.getElementById("password").value;
+            // console.log(uid);
+            fetch(`http://localhost:5000/users?uid=${uid}&password=${password}`)
                 .then(res => res.json())
-                .then(data => division.innerText = JSON.stringify(data))
+                .then(rows => {
+                    data.innerHTML = "";
+                    const rowEle = document.createElement("div");
+                    console.log(rows.length);
+                    if(rows.length===0)
+                    {
+                        rowEle.classList.add("information");
+                        rowEle.innerText="Invalid id or Password"
+                        data.appendChild(rowEle);
+                    }
+                    else{
+                    rows.map(row =>{
+                        rowEle.classList.add("information");
+                        // <div class="information"></div>
+                        
+                        const u_id = document.createElement("div");
+                        u_id.classList.add("attribute");
+                        u_id.innerText = "ID:   "+row.user_id;
+
+                        // if()
+                        
+                        
+
+                        // <div class="attribute">1</div>
+
+                        const name = document.createElement("div");
+                        name.classList.add("attribute");
+                        name.innerText = "Name:   "+ row.name;
+                        // <div class="attribute">jagdish</div>
+
+                        const email = document.createElement("div");
+                        email.classList.add("attribute");
+                        email.innerText = "Email_ID:   "+row.email_id;
+                         
+
+                        const gender = document.createElement("div");
+                        gender.classList.add("attribute");
+                        gender.innerText = "Gender:   "+row.gender;
+
+                        const ispremium = document.createElement("div");
+                        ispremium.classList.add("attribute");
+                        ispremium.innerText = "Is_premium:   "+row.is_premium;
+
+                        const cno = document.createElement("div");
+                        cno.classList.add("attribute");
+                        cno.innerText ="Contact:   "+ row.contact_number;
+
+                        rowEle.appendChild(u_id);
+                        // <div class="information">
+                        //     <div class="attribute">1</div>
+                        // </div>
+
+                        rowEle.appendChild(name);
+                        // <div class="information">
+                        //     <div class="attribute">jagdish</div>
+                        // </div>
+                        rowEle.appendChild(email);
+                        rowEle.appendChild(gender);
+                        rowEle.appendChild(ispremium);
+                        rowEle.appendChild(cno);
+                        data.appendChild(rowEle);
+                        return row;
+                        
+                    })
+                }
+                })
         }
 
-        // addUser = () => {
-        //     fetch("http://localhost:5000/", {
-        //         method: "POST",
-        //         headers: {
-        //             "Content-Type": "application/json",
-        //         },
-        //         body: JSON.stringify({
-        //             id: 12,
-        //             name: "paras"
-        //         })
-        //     })
-        //         .then(res => console.log("success"))
-        //         .catch(err => console.log(err))
-        // }
     </script>
 </body>
 

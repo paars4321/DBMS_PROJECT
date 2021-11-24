@@ -1,4 +1,4 @@
-import express from "express";
+import express, { response } from "express";
 import pg from "pg";
 const { Client } = pg;
 
@@ -31,9 +31,16 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get("/:user_id", (req, res) =>
-    client.query(`select * FROM pr_db.user_information WHERE user_id=${req.params.user_id}`).then((data) => res.json(data.rows))
-);
+
+app.get("/users", (req, res) => {
+    client
+    // console.log(req.query.uid)
+        .query(`select * FROM pr_db.user_information WHERE user_id=$1 AND password=$2`, [req.query.uid,req.query.password])
+        .then((data) => {
+            console.log(data.rows);
+            res.json(data.rows);
+        });
+});
 
 // app.post("/", (req, res) => {
 //     client
