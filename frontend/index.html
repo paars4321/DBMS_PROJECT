@@ -10,78 +10,87 @@
 </head>
 
 <body>
-    <div class="userbody">
-        
-        <div class="box" id="b1"> 
-        <label for="id">ID:</label>
-        <input type="text" id="id" placeholder="Enter your ID" > 
+    <div class="querybox">
+        <div class="query container">
+
+            <div class="box" id="b1">
+                <label for="id">ID:</label>
+                <input type="text" id="id" placeholder="Enter your ID">
+            </div>
+
+            <div class="box" id="b2">
+                <label for="password">Password:</label>
+                <input type="text" id="password" placeholder="Enter your Password">
+            </div>
+
+            <!-- <div class="btn"> -->
+            <button class="btn" onclick="fetchData()">fetch</button>
+
+            <!-- </div> -->
         </div>
-     
-        <div class="box" id="b2"> 
-    <label for="password" >Password:</label>
-    <input type="text" id="password" placeholder="Enter your Password">
+        <div id="data1"></div>
     </div>
-   
-    <!-- <div class="btn"> -->
-    <button class ="btn" onclick="fetchData()">fetch</button>
-    
-    <!-- </div> -->
+
+    <div class="querybox">
+        <div class="query container">
+            <!-- <div class="btn"> -->
+            <button class="btn" onclick="fetchCenters()">fetch datacenters list</button>
+            <!-- </div> -->
+        </div>
+        <div id="data2"></div>
     </div>
-    <div id="data"></div>
-    <script>
-        fetchData = () => {
-            const data = document.getElementById("data");
-            const uid = document.getElementById("id").value;
-            const password = document.getElementById("password").value;
-            // console.log(uid);
-            fetch(`http://localhost:5000/users?uid=${uid}&password=${password}`)
-                .then(res => res.json())
-                .then(rows => {
-                    data.innerHTML = "";
-                    const rowEle = document.createElement("div");
-                    console.log(rows.length);
-                    if(rows.length===0)
-                    {
-                        rowEle.classList.add("information");
-                        rowEle.innerText="Invalid id or Password"
-                        data.appendChild(rowEle);
-                    }
-                    else{
-                    rows.map(row =>{
-                        rowEle.classList.add("information");
+
+    </div>
+</body>
+
+<script>
+    const fetchData = () => {
+        const data = document.getElementById("data1");
+        const uid = document.getElementById("id").value;
+        const password = document.getElementById("password").value;
+        // console.log(uid);
+        fetch(`http://localhost:5000/users?uid=${uid}&password=${password}`)
+            .then(res => res.json())
+            .then(rows => {
+                data.innerHTML = "";
+                const rowEle = document.createElement("div");
+                rowEle.classList.add("container");
+                // <div class="information"></div>
+
+                if (rows.length === 0) {
+                    rowEle.innerText = "Invalid id or Password"
+                }
+                else {
+                    rows.map(row => {
                         // <div class="information"></div>
-                        
+
                         const u_id = document.createElement("div");
                         u_id.classList.add("attribute");
-                        u_id.innerText = "ID:   "+row.user_id;
-
-                        // if()
-                        
-                        
+                        u_id.innerText = "ID:   " + row.user_id;
 
                         // <div class="attribute">1</div>
 
                         const name = document.createElement("div");
                         name.classList.add("attribute");
-                        name.innerText = "Name:   "+ row.name;
+                        name.innerText = "Name:   " + row.name;
                         // <div class="attribute">jagdish</div>
 
                         const email = document.createElement("div");
                         email.classList.add("attribute");
-                        email.innerText = "Email_ID:   "+row.email_id;
-                         
+                        email.innerText = "Email_ID:   " + row.email_id;
+
 
                         const gender = document.createElement("div");
                         gender.classList.add("attribute");
-                        gender.innerText = "Gender:   "+row.gender;
+                        gender.innerText = "Gender:   " + row.gender;
 
                         const ispremium = document.createElement("div");
                         ispremium.classList.add("attribute");
-                        ispremium.innerText = "Is_premium:   "+row.is_premium;
+                        ispremium.innerText = "Is_premium:   " + row.is_premium;
 
                         const cno = document.createElement("div");
                         cno.classList.add("attribute");
-                        cno.innerText ="Contact:   "+ row.contact_number;
+                        cno.innerText = "Contact:   " + row.contact_number;
 
                         rowEle.appendChild(u_id);
                         // <div class="information">
@@ -96,15 +105,50 @@
                         rowEle.appendChild(gender);
                         rowEle.appendChild(ispremium);
                         rowEle.appendChild(cno);
-                        data.appendChild(rowEle);
                         return row;
-                        
                     })
                 }
-                })
-        }
+                data.appendChild(rowEle);
+            })
+    }
 
-    </script>
-</body>
+    const fetchCenters = () => {
+        console.log("clicked");
+        const data = document.getElementById("data2");
+
+        fetch(`http://localhost:5000/centers`)
+            .then(res => res.json())
+            .then(rows => {
+                data.innerHTML = "";
+
+                rows.map(row => {
+                    const rowEle = document.createElement("div");
+                    rowEle.classList.add("container");
+
+                    const type = document.createElement("div");
+                    type.classList.add("attribute");
+                    type.innerText = "type: " + row.data_center_type;
+                    
+                    const location = document.createElement("div");
+                    location.classList.add("attribute");
+                    location.innerText = "location: " + row.location;
+                    
+                    const rating = document.createElement("div");
+                    rating.classList.add("attribute");
+                    rating.innerText = "rating: " + row.rating;
+                    
+                    rowEle.appendChild(type);
+                    rowEle.appendChild(location);
+                    rowEle.appendChild(rating);
+                    console.log(rowEle);
+
+                    data.appendChild(rowEle);
+                    return row;
+                })
+
+            })
+    }
+
+</script>
 
 </html>

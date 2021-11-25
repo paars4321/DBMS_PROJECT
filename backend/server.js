@@ -17,7 +17,7 @@ const client = new Client({
     port: 5432,
     database: "postgres",
     user: "postgres",
-    password: "admin",
+    password: "Jagdish@123",
 });
 
 client
@@ -31,15 +31,20 @@ app.use((req, res, next) => {
     next();
 });
 
-
 app.get("/users", (req, res) => {
     client
-    // console.log(req.query.uid)
-        .query(`select * FROM pr_db.user_information WHERE user_id=$1 AND password=$2`, [req.query.uid,req.query.password])
-        .then((data) => {
-            console.log(data.rows);
-            res.json(data.rows);
-        });
+        // console.log(req.query.uid)
+        .query(
+            `select * FROM pr_db.user_information WHERE user_id=$1 AND password=$2`,
+            [req.query.uid, req.query.password]
+        )
+        .then((data) => res.json(data.rows));
+});
+
+app.get("/centers", (req, res) => {
+    client
+        .query("select * FROM pr_db.data_center_information")
+        .then((data) => res.json(data.rows));
 });
 
 // app.post("/", (req, res) => {
